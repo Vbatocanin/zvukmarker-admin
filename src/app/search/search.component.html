@@ -1,0 +1,61 @@
+<!-- Selector for search type -->
+<div class="container">
+  <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+    <mat-button-toggle (click)="switchSearchMethod('Author by ID')"
+      >Author by ID</mat-button-toggle
+    >
+    <mat-button-toggle (click)="switchSearchMethod('Big brain search')"
+      >Big brain search</mat-button-toggle
+    >
+  </mat-button-toggle-group>
+
+  <!-- Author by ID search -->
+  <form
+    *ngIf="m_searchType == 'Author by ID'"
+    class="col-12 my-3"
+    [formGroup]="this.m_searchFormID"
+    (ngSubmit)="searchBookByID()"
+  >
+    <div class="form-group">
+      <label for="formGroupExampleInput">Search autor by ID:</label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Input id"
+        formControlName="id"
+      />
+    </div>
+  </form>
+  <!-- Display results of search by ID -->
+  <app-book-info
+    *ngIf="m_searchType == 'Author by ID' && m_searchResult != null"
+    class="col-12"
+    [m_book]="m_searchResult"
+  ></app-book-info>
+</div>
+
+<!-- Big brain search, works by sequentially matching the
+     entered keyword to book attributes -->
+<div class="container">
+  <form
+    *ngIf="m_searchType == 'Big brain search'"
+    class="col-12 my-3"
+    [formGroup]="this.m_searchFormKeyword"
+    (ngSubmit)="searchBookByID()"
+  >
+    <div class="form-group">
+      <label>Search by keyword:</label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Keyword"
+        formControlName="searchParameter"
+      />
+    </div>
+  </form>
+  <app-book-info
+    *ngIf="m_searchResult != null"
+    class="col-12"
+    [m_book]="m_searchResult"
+  ></app-book-info>
+</div>

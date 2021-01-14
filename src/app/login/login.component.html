@@ -1,0 +1,57 @@
+<div class="container">
+
+
+  <form role="form" (submit)="login()">
+
+    <mat-form-field class="row" appearance="standard">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="credentials.username"/>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field class="row" appearance="standard">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="credentials.password"/>
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <br />
+
+    <button type="submit" class="row" mat-raised-button color="primary">Login</button>
+  </form>
+  <!-- UPDATE -->
+  <form role="form" (submit)="login()">
+
+    <mat-form-field class="row" appearance="standard">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="credentials.username"/>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field class="row" appearance="standard">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="credentials.password"/>
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <br />
+
+    <button type="submit" class="row" mat-raised-button color="primary">Login</button>
+  </form>
+
+
+</div>
