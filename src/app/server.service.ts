@@ -12,10 +12,15 @@ export class ServerService {
 
   SERVER_URL: string = "http://localhost:8001/";
   authenticated = false;
+  m_creds = new HttpHeaders({
+    authorization: 'Basic ' + btoa("test4" + ':' + "test4")
+  });
+
 
   constructor(private http: HttpClient) {
 
   }
+
 
   authenticate(credentials, callback) {
 
@@ -34,15 +39,16 @@ export class ServerService {
 
   }
 
-  uploadBook(_meta: BookMetadata, _file: any) {
-
+  uploadBook(_meta: BookMetadata, _file: any, _creds: any) {
     this.createBookResourse(_meta);
     // uploadBinary();
   }
 
   createBookResourse(_meta: BookMetadata): Observable<Book> {
+    _meta['Authorization'] = this.m_creds;
     let request = this.http.post<Book>(this.SERVER_URL + "admin/books/create",
-      _meta);
+      _meta,
+      {headers:this.m_creds});
     return request
   }
 
@@ -55,7 +61,9 @@ export class ServerService {
     console.log(body.get('file'));
 
     try {
-      let book = await this.http.post<Book>(this.SERVER_URL + "admin/books/upload", body).toPromise();
+      let book = await this.http.post<Book>(this.SERVER_URL + "admin/books/upload",
+      body,
+      {headers:this.m_creds}).toPromise();
       return book;
     }
     catch {

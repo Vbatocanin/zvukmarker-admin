@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit {
     private m_serverService: ServerService,
     private m_formBuilder: FormBuilder,
     private m_snackBar: MatSnackBar
-    ) {
+  ) {
     this.m_searchFormID = m_formBuilder.group({
       id: ['', Validators.required],
       keyword: ['', Validators.required],
@@ -41,7 +41,7 @@ export class SearchComponent implements OnInit {
     this.m_searchResult = await this.m_serverService.getBook(searchInfo['id']);
 
     console.log(this.m_searchResult);
-    this.openSnackBar("Book found","Close");
+    this.openSnackBar("Book found", "Close");
   }
 
   async searchByKeyword() {
@@ -49,7 +49,7 @@ export class SearchComponent implements OnInit {
     this.m_searchResult = await this.m_serverService.searchByKeyword(searchKeyword);
 
     console.log(this.m_searchResult);
-    this.openSnackBar("Book found","Close");
+    this.openSnackBar("Book found", "Close");
   }
 
   openSnackBar(message: string, action: string) {
@@ -58,7 +58,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  switchSearchMethod(type: string){
+  switchSearchMethod(type: string) {
     this.m_searchType = type;
 
     console.log(this.m_searchType);

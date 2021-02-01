@@ -13,8 +13,8 @@ import { finalize } from 'rxjs/operators';
 export class LoginComponent implements OnInit {
   hide = true;
   credentials = {
-    username : "",
-    password : ""
+    username : "test4",
+    password : "test4"
   };
 
 
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   constructor(private m_serverService: ServerService, private m_http: HttpClient, private m_router: Router) {
-    this.m_serverService.authenticate(undefined, undefined);
+    this.m_serverService.authenticate(this.credentials["username"], this.credentials["password"]);
   }
 
   logout() {
