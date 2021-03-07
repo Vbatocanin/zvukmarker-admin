@@ -58,6 +58,7 @@ import { ServerService } from './server.service';
 import { ToastComponent } from './toast/toast.component';
 import { BookInfoComponent } from './book-info/book-info.component';
 import { SearchComponent } from './search/search.component';
+import { CreateUserComponent } from './create-user/create-user.component';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { SearchComponent } from './search/search.component';
     LoginComponent,
     ToastComponent,
     BookInfoComponent,
-    SearchComponent
+    SearchComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

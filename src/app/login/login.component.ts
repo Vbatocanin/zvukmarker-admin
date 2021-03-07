@@ -13,8 +13,8 @@ import { finalize } from 'rxjs/operators';
 export class LoginComponent implements OnInit {
   hide = true;
   credentials = {
-    username : "test4",
-    password : "test4"
+    username: "test4",
+    password: "test4"
   };
 
 
@@ -22,25 +22,26 @@ export class LoginComponent implements OnInit {
   }
 
   constructor(private m_serverService: ServerService, private m_http: HttpClient, private m_router: Router) {
-    this.m_serverService.authenticate(this.credentials["username"], this.credentials["password"]);
+    this.m_serverService.authenticate(this.credentials);
   }
 
   logout() {
     this.m_http.post('logout', {}).pipe(
       finalize(() => {
         this.m_serverService.authenticated = false;
+        this.m_serverService.logout();
         this.m_router.navigateByUrl('/login');
       })
     ).subscribe();
   }
 
-  authenticated() { return this.m_serverService.authenticated; }
-
   login() {
-    this.m_serverService.authenticate(this.credentials, () => {
-        this.m_router.navigateByUrl('/');
-    });
+    this.m_serverService.authenticate(this.credentials);
     return false;
+  }
+
+  goToRegister() {
+    this.m_router.navigate(['/register'])
   }
 
 }

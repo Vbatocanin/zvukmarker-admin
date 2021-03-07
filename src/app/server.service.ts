@@ -3,6 +3,7 @@ import { HttpClient, HttpEvent, HttpErrorResponse, HttpEventType, HttpHeaders } 
 import { Book, BookMetadata } from "../app/models/book.model";
 import { Observable, Subscription } from 'rxjs';
 import { SearchResource } from './models/search-resource.model';
+import { tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -12,30 +13,32 @@ export class ServerService {
 
   SERVER_URL: string = "http://localhost:8001/";
   authenticated = false;
-  m_creds = new HttpHeaders({
-    authorization: 'Basic ' + btoa("test4" + ':' + "test4")
-  });
+  m_creds = {}
+  m_credsBasic = new HttpHeaders();
 
 
   constructor(private http: HttpClient) {
 
   }
 
+  logout(){
+    this.m_credsBasic = new HttpHeaders();
+    this.m_creds = {}
+  }
 
-  authenticate(credentials, callback) {
-
-    const headers = new HttpHeaders(credentials ? {
-      authorization: 'Basic ' + btoa(credentials.username + ':' + credentials.password)
-    } : {});
-
-    this.http.get('user', { headers: headers }).subscribe(response => {
-      if (response['name']) {
-        this.authenticated = true;
-      } else {
-        this.authenticated = false;
-      }
-      return callback && callback();
+  async authenticate(credentials) {
+    console.log(this.SERVER_URL + "authUser")
+    let sub = this.http.post<string>(this.SERVER_URL + "authUser",credentials).pipe(tap(res => {
+      console.log(res);
+    }));
+    this.m_creds = credentials
+    this.m_credsBasic = new HttpHeaders({
+      authorization: 'Basic ' + btoa(this.m_creds['username'] + ':' + this.m_creds['password'])
     });
+
+    sub.subscribe(response => console.log(response));
+    return null;
+
 
   }
 
@@ -45,10 +48,10 @@ export class ServerService {
   }
 
   createBookResourse(_meta: BookMetadata): Observable<Book> {
-    _meta['Authorization'] = this.m_creds;
+    _meta['Authorization'] = this.m_credsBasic;
     let request = this.http.post<Book>(this.SERVER_URL + "admin/books/create",
       _meta,
-      {headers:this.m_creds});
+      {headers:this.m_credsBasic});
     return request
   }
 
@@ -63,7 +66,7 @@ export class ServerService {
     try {
       let book = await this.http.post<Book>(this.SERVER_URL + "admin/books/upload",
       body,
-      {headers:this.m_creds}).toPromise();
+      {headers:this.m_credsBasic}).toPromise();
       return book;
     }
     catch {

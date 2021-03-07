@@ -1,7 +1,7 @@
 <div class="container">
 
 
-  <form role="form" (submit)="login()">
+  <form role="form" (submit)="register()">
 
     <mat-form-field class="row" appearance="standard">
       <mat-label>Username</mat-label>
@@ -11,11 +11,10 @@
 
     <mat-form-field class="row" appearance="standard">
       <mat-label>Password</mat-label>
-      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="credentials.password"/>
+      <input matInput [type]="true ? 'password' : 'text'" [(ngModel)]="credentials.password"/>
       <button
         mat-icon-button
         matSuffix
-        (click)="hide = !hide"
         [attr.aria-label]="'Hide password'"
         [attr.aria-pressed]="hide"
       >
@@ -24,11 +23,8 @@
     </mat-form-field>
     <br />
 
-    <button type="submit" class="row" mat-raised-button color="primary">Login</button>
+    <button type="submit" class="row" mat-raised-button color="primary">Register</button>
   </form>
-  <br>
-  <br>
-  <button class="row" mat-raised-button color="primary" (click)="goToRegister()">Don't have an account?</button>
 
 
 
