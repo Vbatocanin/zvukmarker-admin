@@ -22,6 +22,16 @@ export class ServerService {
 
   }
 
+  getUsername(): string{
+    if (this.m_creds != {}){
+      return this.m_creds['username'];
+    }
+    else{
+      return undefined;
+    }
+
+  }
+
   logout() {
     this.m_credsBasic = new HttpHeaders();
     this.m_creds = {}
@@ -37,11 +47,14 @@ export class ServerService {
       observe: 'response'
     });
     try {
-      let res = await this.http.get(this.SERVER_URL + "library/get/current", { headers }).toPromise();
+      await this.http.get(this.SERVER_URL + "library/get/current", { headers }).toPromise();
+      this.m_creds = credentials
       this.m_credsBasic = new HttpHeaders({
         authorization: 'Basic ' + btoa(username + ':' + password)
       });
+
       return true;
+
     } catch {
       return false;
     }
@@ -65,7 +78,7 @@ export class ServerService {
     let body = new FormData();
 
     body.append("file", _file);
-    body.append("bookId", _id)
+    body.append("bookId", _id);
 
     console.log(body.get('file'));
 

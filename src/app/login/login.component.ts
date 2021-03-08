@@ -44,10 +44,13 @@ export class LoginComponent implements OnInit {
     let isValid = await this.m_serverService.authenticate(credentials);
     console.log(isValid);
     if (!isValid) {
-      this.openSnackBar("Incorrect credentials", "Close")
+      this.openSnackBar("Incorrect credentials!", "Close")
       this.username = "";
       this.password = "";
+    }else{
+      this.openSnackBar("Successfully logged in!", "Close")
     }
+
   }
 
   goToRegister() {

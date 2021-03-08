@@ -1,25 +1,59 @@
 <mat-toolbar color="primary">
+
+  <!--Menu button-->
   <button
     mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
+    [matMenuTriggerFor]="menu"
+    aria-label="Example icon-button with a menu"
   >
     <mat-icon>menu</mat-icon>
   </button>
+
+  <!--Drop-down menu contents-->
+  <mat-menu #menu="matMenu">
+
+    <button mat-menu-item routerLink="home" routerLinkActive="active">
+      <mat-icon>edit</mat-icon>
+      <span>Add a book</span>
+    </button>
+
+    <button routerLink="search" routerLinkActive="active" mat-menu-item>
+      <mat-icon>search</mat-icon>
+      <span>Search</span>
+    </button>
+
+  </mat-menu>
+
   <span>Zvukmarker Admin</span>
-  <span class="example-spacer"></span>
-  <button
-    mat-icon-button
-    class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
-  >
-    <mat-icon>login</mat-icon>
-  </button>
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with share icon"
-  >
-    <mat-icon>login</mat-icon>
-  </button>
+
+  <!--Big Chungus spacer, reffer to scss file for more info-->
+  <span class="spacer"></span>
+
+  <!--Logout section-->
+  <ng-container *ngIf="updateUsername() != undefined; else elseTemplate">
+    <mat-icon>person</mat-icon>
+    <span>{{ updateUsername()}}</span>
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      class="example-icon favorite-icon"
+      aria-label="Example icon-button with heart icon"
+      (click)="logout()"
+    >
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-container>
+
+  <!--Login section-->
+  <ng-template #elseTemplate>
+    <button
+      mat-icon-button
+      class="example-icon favorite-icon"
+      aria-label="Example icon-button with heart icon"
+      routerLink="login"
+      routerLinkActive="active"
+    >
+      <mat-icon>login</mat-icon>
+    </button>
+  </ng-template>
 </mat-toolbar>
