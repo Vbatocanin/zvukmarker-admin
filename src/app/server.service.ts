@@ -3,7 +3,8 @@ import { HttpClient, HttpEvent, HttpErrorResponse, HttpEventType, HttpHeaders } 
 import { Book, BookMetadata } from "../app/models/book.model";
 import { Observable, Subscription } from 'rxjs';
 import { SearchResource } from './models/search-resource.model';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { Config } from 'protractor';
 
 
 @Injectable({
@@ -21,24 +22,29 @@ export class ServerService {
 
   }
 
-  logout(){
+  logout() {
     this.m_credsBasic = new HttpHeaders();
     this.m_creds = {}
   }
 
   async authenticate(credentials) {
-    console.log(this.SERVER_URL + "authUser")
-    let sub = this.http.post<string>(this.SERVER_URL + "authUser",credentials).pipe(tap(res => {
-      console.log(res);
-    }));
-    this.m_creds = credentials
-    this.m_credsBasic = new HttpHeaders({
-      authorization: 'Basic ' + btoa(this.m_creds['username'] + ':' + this.m_creds['password'])
+    console.log(credentials)
+    let username = credentials['username']
+    let password = credentials['password']
+
+    const headers = new HttpHeaders({
+      Authorization: 'Basic ' + btoa(username + ':' + password),
+      observe: 'response'
     });
-
-    sub.subscribe(response => console.log(response));
-    return null;
-
+    try {
+      let res = await this.http.get(this.SERVER_URL + "library/get/current", { headers }).toPromise();
+      this.m_credsBasic = new HttpHeaders({
+        authorization: 'Basic ' + btoa(username + ':' + password)
+      });
+      return true;
+    } catch {
+      return false;
+    }
 
   }
 
@@ -51,7 +57,7 @@ export class ServerService {
     _meta['Authorization'] = this.m_credsBasic;
     let request = this.http.post<Book>(this.SERVER_URL + "admin/books/create",
       _meta,
-      {headers:this.m_credsBasic});
+      { headers: this.m_credsBasic });
     return request
   }
 
@@ -65,8 +71,8 @@ export class ServerService {
 
     try {
       let book = await this.http.post<Book>(this.SERVER_URL + "admin/books/upload",
-      body,
-      {headers:this.m_credsBasic}).toPromise();
+        body,
+        { headers: this.m_credsBasic }).toPromise();
       return book;
     }
     catch {

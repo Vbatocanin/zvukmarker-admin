@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServerService } from '../server.service';
 import { finalize } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -12,17 +13,17 @@ import { finalize } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
   hide = true;
-  credentials = {
-    username: "test4",
-    password: "test4"
-  };
+  username = "";
+  password = "";
 
 
   ngOnInit(): void {
   }
 
-  constructor(private m_serverService: ServerService, private m_http: HttpClient, private m_router: Router) {
-    this.m_serverService.authenticate(this.credentials);
+  constructor (private m_serverService: ServerService,
+               private m_http: HttpClient,
+               private m_router: Router,
+               private m_snackBar: MatSnackBar) {
   }
 
   logout() {
@@ -35,13 +36,27 @@ export class LoginComponent implements OnInit {
     ).subscribe();
   }
 
-  login() {
-    this.m_serverService.authenticate(this.credentials);
-    return false;
+  async login() {
+    let credentials = {
+      'password': this.password,
+      'username': this.username
+    }
+    let isValid = await this.m_serverService.authenticate(credentials);
+    console.log(isValid);
+    if (!isValid) {
+      this.openSnackBar("Incorrect credentials", "Close")
+      this.username = "";
+      this.password = "";
+    }
   }
 
   goToRegister() {
     this.m_router.navigate(['/register'])
   }
 
+  openSnackBar(message: string, action: string) {
+    this.m_snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 }

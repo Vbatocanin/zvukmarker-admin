@@ -1,17 +1,19 @@
 <div class="container">
-
-
   <form role="form" (submit)="login()">
-
     <mat-form-field class="row" appearance="standard">
       <mat-label>Username</mat-label>
-      <input matInput [(ngModel)]="credentials.username"/>
+      <input matInput name="username" [(ngModel)]="username" />
     </mat-form-field>
     <br />
 
     <mat-form-field class="row" appearance="standard">
       <mat-label>Password</mat-label>
-      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="credentials.password"/>
+      <input
+        matInput
+        name="password"
+        [type]="hide ? 'password' : 'text'"
+        [(ngModel)]="password"
+      />
       <button
         mat-icon-button
         matSuffix
@@ -24,12 +26,18 @@
     </mat-form-field>
     <br />
 
-    <button type="submit" class="row" mat-raised-button color="primary">Login</button>
+    <button type="submit" class="row" mat-raised-button color="primary">
+      Login
+    </button>
   </form>
-  <br>
-  <br>
-  <button class="row" mat-raised-button color="primary" (click)="goToRegister()">Don't have an account?</button>
-
-
-
+  <br />
+  <br />
+  <button
+    class="row"
+    mat-raised-button
+    color="primary"
+    (click)="goToRegister()"
+  >
+    Don't have an account?
+  </button>
 </div>
