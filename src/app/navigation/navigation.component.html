@@ -12,14 +12,19 @@
   <!--Drop-down menu contents-->
   <mat-menu #menu="matMenu">
 
-    <button mat-menu-item routerLink="home" routerLinkActive="active">
-      <mat-icon>edit</mat-icon>
-      <span>Add a book</span>
-    </button>
-
     <button routerLink="search" routerLinkActive="active" mat-menu-item>
       <mat-icon>search</mat-icon>
       <span>Search</span>
+    </button>
+
+    <button mat-menu-item routerLink="home" routerLinkActive="active">
+      <mat-icon>book</mat-icon>
+      <span>Add a book</span>
+    </button>
+
+    <button mat-menu-item routerLink="home" routerLinkActive="active">
+      <mat-icon>edit</mat-icon>
+      <span>Edit book</span>
     </button>
 
   </mat-menu>

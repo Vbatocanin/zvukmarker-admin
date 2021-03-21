@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-user',
@@ -8,10 +9,11 @@ import { Component, OnInit } from '@angular/core';
 export class CreateUserComponent implements OnInit {
 
   hide = true;
-  credentials = {
-    username : "test4",
-    password : "test4"
-  };
+  f_username = new FormControl('', [Validators.required]);
+  f_email = new FormControl('', [Validators.required, Validators.email]);
+  f_password = new FormControl('', [Validators.required]);
+  f_password2 = new FormControl('', [Validators.required]);
+
 
   constructor() { }
 
@@ -20,5 +22,20 @@ export class CreateUserComponent implements OnInit {
 
   }
 
-  register(){}
+  register(){
+
+    console.log(this.f_email.value);
+    console.log();
+
+  }
+
+
+
+  getEmailErrorMessage() {
+    if (this.f_email.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.f_email.hasError('email') ? 'Not a valid email' : '';
+  }
 }

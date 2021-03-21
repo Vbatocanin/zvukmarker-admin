@@ -15,6 +15,7 @@ export class ServerService {
   SERVER_URL: string = "http://localhost:8001/";
   authenticated = false;
   m_creds = {}
+  m_isAdminLogged = false
   m_credsBasic = new HttpHeaders();
 
 
@@ -37,10 +38,10 @@ export class ServerService {
     this.m_creds = {}
   }
 
-  async authenticate(credentials) {
-    console.log(credentials)
-    let username = credentials['username']
-    let password = credentials['password']
+  async authenticate(_credentials) {
+    console.log(_credentials)
+    let username = _credentials['username']
+    let password = _credentials['password']
 
     const headers = new HttpHeaders({
       Authorization: 'Basic ' + btoa(username + ':' + password),
@@ -48,7 +49,7 @@ export class ServerService {
     });
     try {
       await this.http.get(this.SERVER_URL + "library/get/current", { headers }).toPromise();
-      this.m_creds = credentials
+      this.m_creds = _credentials
       this.m_credsBasic = new HttpHeaders({
         authorization: 'Basic ' + btoa(username + ':' + password)
       });
@@ -58,6 +59,43 @@ export class ServerService {
     } catch {
       return false;
     }
+
+  }
+
+  // async authenticateAdmin() {
+  //   console.log(this.m_credsBasic)
+
+  //   try {
+  //     await this.http.get(this.SERVER_URL + "admin/get", { this.m_credsBasic }).toPromise();
+  //     this.m_creds = credentials
+  //     this.m_credsBasic = new HttpHeaders({
+  //       authorization: 'Basic ' + btoa(username + ':' + password)
+  //     });
+
+  //     return true;
+
+  //   } catch {
+  //     return false;
+  //   }
+
+  // }
+
+  async registerUser(_username, _password, _email) {
+    try{
+      let submitUser = {
+        'username':_username,
+        'password':_password,
+        'email':_email,
+      }
+      await this.http.post(this.SERVER_URL+'submitUser', submitUser).toPromise();
+
+      return true;
+    }catch{
+      return false
+    }
+  }
+
+  async registerAdmin() {
 
   }
 
@@ -104,8 +142,8 @@ export class ServerService {
     return resultingBook;
   }
 
-  searchByKeyword(searchMeta: any): Promise<any> {
-    let results = this.http.get<SearchResource>(this.SERVER_URL + "books/search", searchMeta)
+  searchByKeyword(_searchMeta: any): Promise<any> {
+    let results = this.http.get<SearchResource>(this.SERVER_URL + "books/search", _searchMeta)
       .toPromise();
 
     return results;
@@ -121,42 +159,6 @@ export class ServerService {
     let request = this.http.post<Book>(this.SERVER_URL + "admin/books/create", _meta);
     return request;
   }
-
-
-  /*TODO:
-
-    BOOKS:
-    updateBookResource()
-      - nonBinary edit
-      - isti endpoint kao create book resource, samo sa konkretnim id-em u json body-u, npr:
-        {
-          "id": "4",
-          "title": "Педерски испрдак Тони Блер",
-          "author": {
-              "fullName": "Војислав Шешељ"
-          },
-          "tags": [
-              { "tag": "србски"},
-              { "tag": "епик"}
-          ]
-        }
-
-    getAuthor()
-    searchAuthor()
-
-    USER:
-    submitUser()
-      - nou
-    authenticate() - application.properties
-    authenticateAdmin()
-      - mora se rucno u bazi u tabeli authorities da se setuje role ADMIN
-    addBookToUserLib()
-    getLibraryOfUser()
-    getDiscoveryQueueForUser()
-
-  */
-
-
 
 }
 
